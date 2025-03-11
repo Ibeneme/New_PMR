@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {useState, useRef, useEffect} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -8,17 +8,17 @@ import {
   Easing,
   Platform,
 } from 'react-native';
-import { Colors } from '../Colors/Colors';
+import {Colors} from '../Colors/Colors';
 import ArrowLeftIcon from '../Icons/Arrows/ArrowLeftIcon';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 interface AuthHeadersProps {
-  navigation?: { goBack: () => void };
+  navigation?: {goBack: () => void};
   title?: string;
   modal?: boolean;
   onClick?: () => void;
   route?: string; // Optional route prop
-  params?: any;  // Optional params prop to pass to the navigation
+  params?: any; // Optional params prop to pass to the navigation
 }
 
 const AuthHeaders: React.FC<AuthHeadersProps> = ({
@@ -59,8 +59,12 @@ const AuthHeaders: React.FC<AuthHeadersProps> = ({
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        {!modal && (
+        {!modal ? (
           <Pressable onPress={handleGoBack}>
+            <ArrowLeftIcon width={30} height={30} color={Colors.grayColor} />
+          </Pressable>
+        ) : (
+          <Pressable onPress={() => onClick?.()}>
             <ArrowLeftIcon width={30} height={30} color={Colors.grayColor} />
           </Pressable>
         )}

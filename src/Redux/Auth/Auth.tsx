@@ -1,6 +1,7 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import apiService from '../apiService'; // Import the Axios instance
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {handleUnauthorizedError} from '../HandleUnauthorizedError';
 
 // Initial state
 interface AuthState {
@@ -152,6 +153,21 @@ export const resendOTP = createAsyncThunk(
     }
   },
 );
+
+export const fetchMessagesByGroupId = createAsyncThunk(
+  'messages/fetchByGroupId',
+  async (groupId, {rejectWithValue}) => {
+    try {
+      const response = await apiService.get(`/api/auth/messages/${groupId}`);
+      console.log(response.data, 'apiServices');
+      return response.data; // The response will contain the array of messages
+    } catch (error) {
+      const errorMessage = await handleUnauthorizedError(error); // Handle the error
+      return errorMessage;
+    }
+  },
+);
+
 // Route to update user details by ID
 export const updateUser = createAsyncThunk(
   'auth/updateUser',
@@ -161,12 +177,11 @@ export const updateUser = createAsyncThunk(
       last_name?: string;
       phone_number?: string;
       email?: string;
-      _id?: string
+      _id?: string;
     },
     thunkAPI,
   ) => {
     try {
-      
       const response = await apiService.put(
         `/api/auth/user/${userData._id}`,
         userData,
@@ -193,6 +208,20 @@ const authSlice = createSlice({
   },
   extraReducers: builder => {
     builder
+      .addCase(fetchMessagesByGroupId.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(fetchMessagesByGroupId.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.messages = action.payload; // Save the fetched messages to state
+      })
+      .addCase(fetchMessagesByGroupId.rejected, (state, action) => {
+        state.status = 'failed';
+        //state.error = action.error.message;
+        // Log the error message if available
+        console.log('Failed to fetch messages:', action.error.message);
+      })
+
       // Register User
       .addCase(registerUser.pending, state => {
         state.loading = true;

@@ -67,6 +67,9 @@ const OrderRide = () => {
       const updatedFormData = {
         ...values,
         option: 'offer_ride',
+        location_name: location?.name,
+        location_lat: location?.lat,
+        location_lng: location?.lon,
       };
 
       // Navigate to the Summary screen, passing the form data

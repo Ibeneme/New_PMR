@@ -30,9 +30,9 @@ const validationSchema = Yup.object({
 });
 
 const StepA = () => {
-  const route = useRoute()
-  const {location} = route.params
-  console.log(location)
+  const route = useRoute();
+  const {location} = route.params;
+  console.log(location);
   const navigation = useNavigation();
   const [state, setState] = useState('');
   const [senderCity, setSenderCity] = useState('');
@@ -48,6 +48,9 @@ const StepA = () => {
       sender_city: '',
       receiver_city: '',
       delivery_date: null,
+      // location_name: location?.name || '',
+      // location_lat: location?.lat || '',
+      // location_lng: location?.lon || '',
     },
     validationSchema,
     onSubmit: values => {
@@ -56,7 +59,14 @@ const StepA = () => {
         Alert.alert('Please select a delivery date before proceeding.');
         return;
       }
-      navigation.navigate('StepB', {formData: values});
+      const formData = {
+        ...values,
+        location_name: location?.name,
+        location_lat: location?.lat,
+        location_lng: location?.lon,
+      };
+
+      navigation.navigate('StepB', {formData});
     },
   });
 

@@ -119,7 +119,7 @@ const Summary = () => {
             console.log('Parcel created successfully:', response.payload);
             setShowToast(true);
             navigation.navigate('DetailsScreen', {
-              item: response.payload?.data,
+              item: response.payload?.savedParcel,
               activeTab: 'Deliver a Parcel Request',
             });
           } else {

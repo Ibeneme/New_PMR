@@ -27,18 +27,16 @@ export const formatDate = (dateString: any) => {
   return `${day}${suffix} ${month} ${year}`;
 };
 
-
 const EarningsPage = () => {
   const route = useRoute();
   const { earnings } = route.params; // Access earnings from route.params
 
-  const totalEarnings = earnings.reduce(
+  const totalEarnings = earnings?.reduce(
     (acc, item) => acc + (item.amount || 0),
     0,
   ); // Sum of all earnings
 
   // Function to format the date with suffix (st, nd, rd, th)
-
   const renderItem = ({ item }) => (
     <View style={styles.earningsItem}>
       <BoldText style={styles.text} color={Colors.primaryColor}>
@@ -58,14 +56,14 @@ const EarningsPage = () => {
         </RegularText>
 
         {/* Conditionally render "No items" if the earnings list is empty */}
-        {earnings.length === 0 ? (
+        {earnings?.length === 0 ? (
           <RegularText style={styles.noItemsText}>No items available</RegularText>
         ) : (
           <FlatList
-            data={earnings}
-            renderItem={renderItem}
-            keyExtractor={(item, index) => index.toString()}
-          />
+          data={[...earnings]?.reverse()} // Make a copy of the earnings array and reverse it
+          renderItem={renderItem}
+          keyExtractor={(item, index) => index.toString()}
+        />
         )}
       </View>
       <View style={{ marginTop: 48 }}></View>

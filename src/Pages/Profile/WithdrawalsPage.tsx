@@ -1,16 +1,16 @@
-import { useRoute } from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import {View, FlatList, StyleSheet} from 'react-native';
 import {
   BoldText,
   RegularText,
 } from '../../Components/Texts/CustomTexts/BaseTexts'; // Assuming these components are defined
-import { Colors } from '../../Components/Colors/Colors';
+import {Colors} from '../../Components/Colors/Colors';
 import AuthHeaders from '../../Components/Headers/AuthHeaders';
 
 const WithdrawalsPage = () => {
   const route = useRoute();
-  const { withdrawals } = route.params;
+  const {withdrawals} = route.params;
 
   const totalWithdrawals = withdrawals?.reduce(
     (acc, item) => acc + (item.amount || 0),
@@ -18,10 +18,10 @@ const WithdrawalsPage = () => {
   ); // Sum of all withdrawals
 
   // Function to format the date with suffix (st, nd, rd, th)
-  const formatDate = (dateString) => {
+  const formatDate = dateString => {
     const date = new Date(dateString);
     const day = date.getDate();
-    const month = date.toLocaleString('default', { month: 'long' });
+    const month = date.toLocaleString('default', {month: 'long'});
     const year = date.getFullYear();
 
     // Determine suffix
@@ -37,7 +37,7 @@ const WithdrawalsPage = () => {
     return `${day}${suffix} ${month} ${year}`;
   };
 
-  const renderItem = ({ item }) => (
+  const renderItem = ({item}) => (
     <View style={styles.withdrawalItem}>
       <BoldText color="#ff0000" style={[styles.text]}>
         ₦{item.amount || 0}
@@ -45,9 +45,13 @@ const WithdrawalsPage = () => {
       <RegularText style={styles.text}>{formatDate(item.date)}</RegularText>
       <RegularText style={styles.text}>Status: {item.status}</RegularText>
       <RegularText style={styles.text}>Bank: {item.bank}</RegularText>
-      <RegularText style={styles.text}>Account Number: {item.accountNumber}</RegularText>
+      <RegularText style={styles.text}>
+        Account Number: {item.accountNumber}
+      </RegularText>
       {item.accountName && (
-        <RegularText style={styles.text}>Account Name: {item.accountName}</RegularText>
+        <RegularText style={styles.text}>
+          Account Name: {item.accountName}
+        </RegularText>
       )}
     </View>
   );
@@ -55,7 +59,7 @@ const WithdrawalsPage = () => {
   return (
     <View style={styles.container}>
       <AuthHeaders />
-      <View style={{ padding: 16, marginBottom: 120 }}>
+      <View style={{padding: 16, marginBottom: 120}}>
         <BoldText style={styles.header}>Withdrawals</BoldText>
         <RegularText style={styles.total}>
           Total Withdrawals: ₦{totalWithdrawals || 0}
@@ -63,16 +67,18 @@ const WithdrawalsPage = () => {
 
         {/* Conditionally render "No items available" if withdrawals array is empty */}
         {withdrawals?.length === 0 ? (
-          <RegularText style={styles.noItemsText}>No items available</RegularText>
+          <RegularText style={styles.noItemsText}>
+            No items available
+          </RegularText>
         ) : (
           <FlatList
-            data={withdrawals}
+            data={[...withdrawals]?.reverse()} //
             renderItem={renderItem}
             keyExtractor={(item, index) => index.toString()}
           />
         )}
       </View>
-      <View style={{ height: 48 }}></View>
+      <View style={{height: 48}}></View>
     </View>
   );
 };

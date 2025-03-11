@@ -1,8 +1,8 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-//export const BaseUrl = `http://localhost:3000`
+export const BaseUrl = `http://localhost:3000`
 
- export const BaseUrl = `https://padiman-route-admin-q7tl.onrender.com`
+//export const BaseUrl = `https://padiman-route-admin-q7tl.onrender.com`
 
 
 //https://padiman-route-admin-q7tl.onrender.com/

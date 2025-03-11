@@ -101,7 +101,14 @@ const HistoryPage: React.FC = () => {
       if (currentTab) {
         try {
           const response = await dispatch(currentTab.fetchAction(userId));
-          currentTab.setter(response.payload || response.payload?.data);
+          const data = response.payload || response.payload?.data;
+          //const data = response.payload || response.payload?.data;
+          if (Array.isArray(data)) {
+            const reversedData = [...data].reverse(); // Make a copy and reverse it
+            currentTab.setter(reversedData); // Set the reversed copy
+          } else {
+            console.error('The data is not an array:', data);
+          }
           console.log(response.payload, 'response.payloads');
         } catch (err) {
           setError(currentTab.errorMessage);
@@ -119,7 +126,7 @@ const HistoryPage: React.FC = () => {
   const renderHistoryData = () => {
     let dataToRender: HistoryItem[] = [];
 
-    if (activeTab === 'sendParcel') dataToRender = sendParcelData?.data;
+    if (activeTab === 'sendParcel') dataToRender = sendParcelData;
     else if (activeTab === 'deliveryParcel') dataToRender = deliveryParcelData;
     else if (activeTab === 'joinRide') dataToRender = joinRideData;
     else if (activeTab === 'offerRide') dataToRender = offerRideData;
@@ -317,6 +324,8 @@ const HistoryPage: React.FC = () => {
         ) : (
           renderHistoryData()
         )}
+
+
       </ScrollView>
     </View>
   );
@@ -328,7 +337,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f4f4f4',
   },
   scrollContainer: {
-    paddingBottom: 20,
+    paddingBottom: 120,
     padding: 16,
   },
   toggleContainer: {

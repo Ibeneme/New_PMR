@@ -55,11 +55,23 @@ const DeliverParcelStepA = () => {
             city: '',
             travel_date: '',
             arrival_date: '',
+            // location_name: location?.name || '',
+            // location_lat: location?.lat || '',
+            // location_lng: location?.lon || '',
           }}
           validationSchema={validationSchema}
           onSubmit={values => {
             console.log(values);
-            navigation.navigate('DeliverParcelStepB', {formData: values});
+
+            const formData = {
+              ...values,
+              location_name: location?.name,
+              location_lat: location?.lat,
+              location_lng: location?.lon,
+            };
+      
+
+            navigation.navigate('DeliverParcelStepB', {formData});
           }}>
           {({handleSubmit, errors, touched, setFieldValue, values}) => (
             <View>

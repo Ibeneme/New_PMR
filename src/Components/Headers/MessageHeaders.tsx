@@ -10,7 +10,7 @@ import {
   Image,
   Linking,
   Alert,
-  Platform, // Import Text component
+  Platform,
 } from 'react-native';
 import {Colors} from '../Colors/Colors';
 import InfoIcon from '../Icons/Info/InfoIcon';
@@ -19,10 +19,8 @@ import {BoldText, RegularText} from '../Texts/CustomTexts/BaseTexts';
 import {useNavigation} from '@react-navigation/native';
 import VerifiedBadge from '../Icons/VerifiedBadge/VerifiedBadge';
 import PhoneCallIcon from '../Icons/PhoneCall/PhoneCallIcon';
-import FastImage from 'react-native-fast-image';
-import crm from '../../../assets/images/crm/crm.png';
 import MailIcon from '../Icons/MailIcon/MailIcon';
-import {formatName} from '../../Pages/Rides/BookRide/ViewRide';
+
 interface MessageHeadersProps {
   navigation?: {goBack: () => void};
   fullName?: string;
@@ -69,31 +67,22 @@ const MessageHeaders: React.FC<MessageHeadersProps> = ({
   }, [isInfoVisible, scaleAnim]);
 
   const navigationFunction = useNavigation();
+
   const handleGoBack = () => {
-    if (navigation && navigation.goBack) {
+    if (navigation?.goBack) {
       navigation.goBack();
     } else {
       navigationFunction.goBack();
     }
   };
 
-  // Function to render text with bold support
-  const renderInfoText = (text: string) => {
-    const parts = text.split(/(\*\*[^*]+\*\*)/g);
-    return parts.map((part, index) => {
-      if (part.startsWith('**') && part.endsWith('**')) {
-        return (
-          <BoldText key={index} fontSize={16} color={Colors.primaryColor}>
-            {part.replace(/\*\*/g, '')}
-          </BoldText>
-        );
-      }
-      return (
-        <RegularText key={index} fontSize={16} color={Colors.primaryColor}>
-          {part}
-        </RegularText>
-      );
-    });
+  // Function to format names
+  const formatName = (name: string) => {
+    return name
+      .toLowerCase()
+      .split(/[\s_]+/)
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   };
 
   const handleCall = (phoneNumber: string) => {
@@ -105,6 +94,7 @@ const MessageHeaders: React.FC<MessageHeadersProps> = ({
     const subject = 'Support Inquiry';
     const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}`;
     const supported = await Linking.canOpenURL(mailto);
+
     if (supported) {
       await Linking.openURL(mailto);
     } else {
@@ -119,86 +109,37 @@ const MessageHeaders: React.FC<MessageHeadersProps> = ({
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <Pressable
-            onPress={handleGoBack}
-            style={{
-              backgroundColor: Colors.grayColorFaded,
-              padding: 10,
-              borderRadius: 256,
-              marginRight: driver ? 10 : 10,
-            }}>
+          <Pressable onPress={handleGoBack} style={styles.backButton}>
             <ArrowLeftIcon width={16} height={16} color={Colors.grayColor} />
           </Pressable>
-          {/* 
-          <FastImage
-            source={{
-              uri: imageUrl,
-              priority: FastImage.priority.high, // Ensure the image loads quickly
-            }}
-            style={{
-              width: 48,
-              height: 48,
-              borderRadius: 47,
-              marginHorizontal: 6,
-            }}
-            resizeMode={FastImage.resizeMode.cover} // Options: contain, cover, stretch, etc.
-          /> */}
 
-          {support && (
-            <Image
-              source={crm}
-              style={{
-                width: 48,
-                height: 48,
-                borderRadius: 47,
-                marginHorizontal: 6,
-              }}
-            />
-          )}
-
-          <Pressable onPress={onPress} style={[styles.infoButton]}>
+          <Pressable onPress={onPress} style={styles.infoButton}>
             <BoldText fontSize={16} color={Colors.headerColor}>
-              {driver
-                ? phoneNumber !== null
-                  ? formatName(fullName)
-                  : 'This Ride was Cancelled'
-                : formatName(fullName)}
+              {driver ? formatName(fullName) : formatName(fullName)}
 
-              {support === true && 'Papi'}
+              {support && ' Papi'}
             </BoldText>
-            <View style={{flexDirection: 'row', gap: 2, marginTop: 2}}>
+            {/* <View style={styles.subTextContainer}>
               <RegularText fontSize={14} color={Colors.grayColor}>
                 {driver ? plateNumber : 'Support Center'}
               </RegularText>
-              {support && (
-                <VerifiedBadge width={16} height={16} color={badgeColor} />
-              )}
-            </View>
+              {support && <VerifiedBadge width={16} height={16} color={badgeColor} />}
+            </View> */}
           </Pressable>
         </View>
 
         {support && (
           <Pressable
             onPress={handleEmailPress}
-            style={{
-              backgroundColor: callBackgroundIconColor,
-              padding: 10,
-              borderRadius: 256,
-            }}>
+            style={styles.iconButton(callBackgroundIconColor)}>
             <MailIcon size={24} color={callIconColor} />
           </Pressable>
         )}
 
         {driver && phoneNumber !== null && (
           <Pressable
-            onPress={() => {
-              handleCall(phoneNumber);
-            }}
-            style={{
-              backgroundColor: callBackgroundIconColor,
-              padding: 10,
-              borderRadius: 256,
-            }}>
+            onPress={() => handleCall(phoneNumber)}
+            style={styles.iconButton(callBackgroundIconColor)}>
             <PhoneCallIcon width={24} height={24} fill={callIconColor} />
           </Pressable>
         )}
@@ -234,6 +175,7 @@ const styles = StyleSheet.create({
   infoButton: {
     alignItems: 'flex-start',
     borderRadius: 12,
+    marginLeft: 16,
   },
   infoButtonActive: {
     borderRadius: 14,

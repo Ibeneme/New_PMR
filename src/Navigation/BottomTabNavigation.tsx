@@ -11,7 +11,6 @@ import UserIcon from '../Components/Icons/UserIcon/UserIcon';
 import Profile from '../Pages/Profile/Profile';
 import History from '../Pages/History/History';
 import IoTHistoryIcon from '../Components/Icons/HistoryIcon/IoTHistoryIcon';
-import AutoCompletePlaces from '../Pages/Home/AutoCompletePlaces';
 
 const Tab = createBottomTabNavigator();
 
@@ -83,32 +82,7 @@ function BottomTabNavigation() {
           ),
         }}
       />
-      <Tab.Screen
-        name="AutoCompletePlaces"
-        component={AutoCompletePlaces}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({focused}) => (
-            <UserIcon
-              width={18}
-              height={18}
-              color={focused ? Colors.primaryColor : Colors.grayColor}
-            />
-          ),
-          tabBarLabel: ({focused}: any) => (
-            <RegularText
-              style={[
-                tabBarLabelStyle,
-                {
-                  color: focused ? Colors.primaryColor : Colors.grayColor,
-                  fontSize: 12,
-                },
-              ]}>
-              AutoCompletePlaces
-            </RegularText>
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="Profile"
         component={Profile}

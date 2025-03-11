@@ -14,6 +14,9 @@ import EarningsPage from '../Pages/Profile/EarningsPage';
 import WithdrawalsPage from '../Pages/Profile/WithdrawalsPage';
 import EditProfileScreen from '../Pages/Profile/EditProfile';
 import DetailsScreen from '../Pages/History/Details';
+import AutoCompletePlaces from '../Pages/Home/AutoCompletePlaces';
+import ChatPage from '../Pages/Messages/ChatPage';
+import ReceiptScreen from '../Pages/History/ReceiptScreen';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -30,6 +33,9 @@ export type MainStackParamList = {
   Earnings: undefined;
   EditProfileScreen: undefined;
   DetailsScreen: undefined;
+  AutoCompletePlaces: undefined;
+  ChatPage: undefined;
+  ReceiptScreen: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -63,7 +69,11 @@ const MainStackNavigator: React.FC = () => {
           component={Summary}
           options={{headerShown: false}}
         />
-
+        <MainStack.Screen
+          name="ChatPage"
+          component={ChatPage}
+          options={{headerShown: false}}
+        />
         <MainStack.Screen
           name="DeliverParcelStepA"
           component={DeliverParcelStepA}
@@ -103,6 +113,17 @@ const MainStackNavigator: React.FC = () => {
         <MainStack.Screen
           name="DetailsScreen"
           component={DetailsScreen}
+          options={{headerShown: false}}
+        />
+
+        <MainStack.Screen
+          name="AutoCompletePlaces"
+          component={AutoCompletePlaces}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="ReceiptScreen"
+          component={ReceiptScreen}
           options={{headerShown: false}}
         />
       </MainStack.Navigator>

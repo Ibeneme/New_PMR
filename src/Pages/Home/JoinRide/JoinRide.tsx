@@ -55,8 +55,12 @@ const Join = () => {
     if (values.travelling_date) {
       const formdatas = {
        ...values,
-        option: 'join_ride', // Pass the option in the formdata object
+        option: 'join_ride', 
+        location_name: location?.name,
+        location_lat: location?.lat,
+        location_lng: location?.lon, // Pass the option in the formdata object
       };
+
 
       navigation.navigate('Summary', {formData: formdatas});
 

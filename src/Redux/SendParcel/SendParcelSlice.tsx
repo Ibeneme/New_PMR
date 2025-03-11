@@ -1,6 +1,6 @@
 import {createSlice, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit';
 import apiService from '../apiService';
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // 📌 Define Parcel Type
 interface Parcel {
@@ -76,8 +76,8 @@ export const fetchParcelsByUser = createAsyncThunk<
 
   try {
     const response = await apiService.get(`${EXTRA_URL}/user/${userId}`);
-    console.log(response, 'response')
-    return response.data;
+    console.log(response, 'response');
+    return response.data.data;
   } catch (error: unknown) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'An error occurred',
@@ -110,6 +110,39 @@ export const updateParcel = createAsyncThunk<
   try {
     const response = await apiService.put(`${EXTRA_URL}/${id}`, parcelData);
     return response.data.data;
+  } catch (error: unknown) {
+    return rejectWithValue(
+      error instanceof Error ? error.message : 'An error occurred',
+    );
+  }
+});
+interface Driver {
+  _id: string;
+  name: string;
+  location_lat: number;
+  location_lng: number;
+}
+
+interface NearestDriverState {
+  isDriverPaired: boolean;
+  pairedDriver: Driver | null;
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
+}
+
+// 📌 Fetch Nearest Driver
+export const findNearestDriver = createAsyncThunk<
+  {isDriverPaired: boolean; pairedDriver: Driver | null},
+  {id: string; activeTab: 'sendParcel' | 'joinRide'},
+  {rejectValue: string}
+>('nearestDriver/find', async (body, {rejectWithValue}) => {
+  try {
+    const response = await apiService.post(
+      `${EXTRA_URL}/find-nearest-driver`,
+      body,
+    );
+    console.log(response.data, 'response.data');
+    return response.data;
   } catch (error: unknown) {
     return rejectWithValue(
       error instanceof Error ? error.message : 'An error occurred',
@@ -200,7 +233,21 @@ const sendParcelSlice = createSlice({
             parcel => parcel._id !== action.payload,
           );
         },
-      );
+      )
+      .addCase(findNearestDriver.pending, state => {
+        state.status = 'loading';
+      })
+      .addCase(
+        findNearestDriver.fulfilled,
+        (state, action: PayloadAction<Parcel[]>) => {
+          state.status = 'succeeded';
+          state.parcels = action.payload;
+        },
+      )
+      .addCase(findNearestDriver.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload || 'Failed to find the nearest driver';
+      });
   },
 });
 

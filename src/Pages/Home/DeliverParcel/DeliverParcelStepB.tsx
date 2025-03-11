@@ -46,30 +46,30 @@ const DeliverParcelStepB = () => {
     },
     validationSchema,
     onSubmit: values => {
-        if (
-          values.min_price &&
-          values.max_price &&
-          values.max_price < values.min_price
-        ) {
-          Alert.alert('Max price cannot be lower than Min price.');
-          return;
-        }
-      
-        // Add 'option' key to the formData and merge with current form values
-        const updatedFormData = {
-          ...formData,
-          ...values,
-          option: 'deliver_parcel', // Add the new key-value pair here
-        };
-      
-        // Navigate to the 'Summary' screen with the updated formData
-        navigation.navigate('Summary', {formData: updatedFormData});
-      },
+      if (
+        values.min_price &&
+        values.max_price &&
+        values.max_price < values.min_price
+      ) {
+        Alert.alert('Max price cannot be lower than Min price.');
+        return;
+      }
+
+      // Add 'option' key to the formData and merge with current form values
+      const updatedFormData = {
+        ...formData,
+        ...values,
+        option: 'deliver_parcel', // Add the new key-value pair here
+      };
+
+      // Navigate to the 'Summary' screen with the updated formData
+      navigation.navigate('Summary', {formData: updatedFormData});
+    },
   });
 
   const renderOption = (field, value) => {
     const options = ['Yes', 'No'];
-    return options.map((option) => (
+    return options.map(option => (
       <TouchableOpacity
         key={option}
         style={[
@@ -83,11 +83,10 @@ const DeliverParcelStepB = () => {
         <RegularText
           style={[
             styles.optionText,
-            formik.values[field] === (option === 'Yes') 
-              ? {color: 'white'} 
+            formik.values[field] === (option === 'Yes')
+              ? {color: 'white'}
               : {color: '#333'},
-          ]}
-        >
+          ]}>
           {option}
         </RegularText>
       </TouchableOpacity>
