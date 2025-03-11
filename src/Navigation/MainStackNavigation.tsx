@@ -10,6 +10,10 @@ import DeliverParcelStepA from '../Pages/Home/DeliverParcel/DeliverParcelStepA';
 import DeliverParcelStepB from '../Pages/Home/DeliverParcel/DeliverParcelStepB';
 import OrderRide from '../Pages/Home/OfferRide/OrderRide';
 import Join from '../Pages/Home/JoinRide/JoinRide';
+import EarningsPage from '../Pages/Profile/EarningsPage';
+import WithdrawalsPage from '../Pages/Profile/WithdrawalsPage';
+import EditProfileScreen from '../Pages/Profile/EditProfile';
+import DetailsScreen from '../Pages/History/Details';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -22,6 +26,10 @@ export type MainStackParamList = {
   DeliverParcelStepB: undefined;
   OrderRide: undefined;
   Join: undefined;
+  Withdrawals: undefined;
+  Earnings: undefined;
+  EditProfileScreen: undefined;
+  DetailsScreen: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -75,6 +83,26 @@ const MainStackNavigator: React.FC = () => {
         <MainStack.Screen
           name="Join"
           component={Join}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="Earnings"
+          component={EarningsPage}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="Withdrawals"
+          component={WithdrawalsPage}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="EditProfileScreen"
+          component={EditProfileScreen}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="DetailsScreen"
+          component={DetailsScreen}
           options={{headerShown: false}}
         />
       </MainStack.Navigator>

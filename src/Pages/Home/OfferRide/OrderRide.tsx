@@ -18,7 +18,7 @@ import {
   BoldText,
 } from '../../../Components/Texts/CustomTexts/BaseTexts';
 import {Colors} from '../../../Components/Colors/Colors';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import AuthHeaders from '../../../Components/Headers/AuthHeaders';
 import ThreeDropdowns from '../../../Utils/DateDropdown';
 import {senderCities} from '../SendParcel/Steps/Data';
@@ -40,9 +40,14 @@ const validationSchema = Yup.object({
 });
 
 const OrderRide = () => {
+  const route = useRoute()
+  const {location} = route.params
+  console.log(location)
   const navigation = useNavigation();
+  const [currentCityModalVisible, setCurrentCityModalVisible] = useState(false);
   const [cityModalVisible, setCityModalVisible] = useState(false);
   const [selectedCity, setSelectedCity] = useState('');
+  const [selectedCurrentCity, setSelectedCurrentCity] = useState('');
   //const [senderCities, setSenderCities] = useState(['City A', 'City B', 'City C']); // Example cities
   const formik = useFormik({
     initialValues: {
@@ -123,7 +128,7 @@ const OrderRide = () => {
         <View style={styles.inputContainer}>
           <RegularText>Current City</RegularText>
           <TouchableOpacity
-            onPress={() => setCityModalVisible(true)}
+            onPress={() => setCurrentCityModalVisible(true)}
             style={styles.customDropdown}>
             <RegularText style={styles.dropdownText}>
               {formik.values.current_city || 'Select Current City'}
@@ -257,7 +262,46 @@ const OrderRide = () => {
             </View>
           </View>
         </Modal>
-        {/* Submit Button */}
+
+        <Modal
+          visible={currentCityModalVisible}
+          transparent
+          animationType="slide"
+          onRequestClose={() => setCurrentCityModalVisible(false)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+              <View style={{marginBottom: 12, gap: 4}}>
+                <BoldText fontSize={20}>Current City</BoldText>
+                <RegularText
+                  fontSize={13}
+                  style={{
+                    backgroundColor: Colors.primaryColorFaded,
+                    color: Colors.primaryColor,
+                    padding: 12,
+                  }}>
+                  Select your Current City - You can Scroll down to view more
+                </RegularText>
+              </View>
+
+              <FlatList
+                data={senderCities || []}
+                keyExtractor={(item, index) => index.toString()}
+                renderItem={({item}) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      setSelectedCurrentCity(item);
+                      formik.setFieldValue('current_city', item);
+                      setCurrentCityModalVisible(false);
+                    }}
+                    style={styles.modalItem}>
+                    <RegularText>{item}</RegularText>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </View>
+        </Modal>
+
         <CustomButton
           title="Submit"
           onPress={formik.handleSubmit}

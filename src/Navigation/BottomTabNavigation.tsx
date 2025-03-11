@@ -6,6 +6,12 @@ import WelcomeScreen from '../Pages/Auth/WelcomeScreen';
 import {RegularText} from '../Components/Texts/CustomTexts/BaseTexts';
 import Home from '../Pages/Home/Home';
 import StepA from '../Pages/Home/SendParcel/Steps/StepA';
+import HomeIcon from '../Components/Icons/HomeIcon/HomeIcon';
+import UserIcon from '../Components/Icons/UserIcon/UserIcon';
+import Profile from '../Pages/Profile/Profile';
+import History from '../Pages/History/History';
+import IoTHistoryIcon from '../Components/Icons/HistoryIcon/IoTHistoryIcon';
+import AutoCompletePlaces from '../Pages/Home/AutoCompletePlaces';
 
 const Tab = createBottomTabNavigator();
 
@@ -30,12 +36,19 @@ function BottomTabNavigation() {
         component={Home}
         options={{
           headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <HomeIcon
+              width={18}
+              height={18}
+              color={focused ? Colors.primaryColor : Colors.grayColor}
+            />
+          ),
           tabBarLabel: ({focused}: any) => (
             <RegularText
               style={[
                 tabBarLabelStyle,
                 {
-                  color: focused ? Colors.primaryColor : Colors.grayColor65,
+                  color: focused ? Colors.primaryColor : Colors.grayColor,
                   fontSize: 12,
                 },
               ]}>
@@ -44,7 +57,84 @@ function BottomTabNavigation() {
           ),
         }}
       />
-
+      <Tab.Screen
+        name="History"
+        component={History}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <IoTHistoryIcon
+              width={18}
+              height={18}
+              color={focused ? Colors.primaryColor : Colors.grayColor}
+            />
+          ),
+          tabBarLabel: ({focused}: any) => (
+            <RegularText
+              style={[
+                tabBarLabelStyle,
+                {
+                  color: focused ? Colors.primaryColor : Colors.grayColor,
+                  fontSize: 12,
+                },
+              ]}>
+              History
+            </RegularText>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="AutoCompletePlaces"
+        component={AutoCompletePlaces}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <UserIcon
+              width={18}
+              height={18}
+              color={focused ? Colors.primaryColor : Colors.grayColor}
+            />
+          ),
+          tabBarLabel: ({focused}: any) => (
+            <RegularText
+              style={[
+                tabBarLabelStyle,
+                {
+                  color: focused ? Colors.primaryColor : Colors.grayColor,
+                  fontSize: 12,
+                },
+              ]}>
+              AutoCompletePlaces
+            </RegularText>
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({focused}) => (
+            <UserIcon
+              width={18}
+              height={18}
+              color={focused ? Colors.primaryColor : Colors.grayColor}
+            />
+          ),
+          tabBarLabel: ({focused}: any) => (
+            <RegularText
+              style={[
+                tabBarLabelStyle,
+                {
+                  color: focused ? Colors.primaryColor : Colors.grayColor,
+                  fontSize: 12,
+                },
+              ]}>
+              Profile
+            </RegularText>
+          ),
+        }}
+      />
       {/* <Tab.Screen
         name="StepA"
         component={StepA}
@@ -55,7 +145,7 @@ function BottomTabNavigation() {
               style={[
                 tabBarLabelStyle,
                 {
-                  color: focused ? Colors.primaryColor : Colors.grayColor65,
+                  color: focused ? Colors.primaryColor : Colors.grayColor,
                   fontSize: 12,
                 },
               ]}>

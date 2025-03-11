@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import ThreeDropdowns from '../../../../Utils/DateDropdown';
 import CustomButton from '../../../../Components/Buttons/CustomButton';
 import AuthHeaders from '../../../../Components/Headers/AuthHeaders';
@@ -30,6 +30,9 @@ const validationSchema = Yup.object({
 });
 
 const StepA = () => {
+  const route = useRoute()
+  const {location} = route.params
+  console.log(location)
   const navigation = useNavigation();
   const [state, setState] = useState('');
   const [senderCity, setSenderCity] = useState('');

@@ -7,7 +7,7 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {Formik} from 'formik';
 import * as Yup from 'yup';
 import CustomTextInput from '../../../Components/TextInputs/CustomTextInputs';
@@ -30,6 +30,9 @@ const validationSchema = Yup.object().shape({
 
 const DeliverParcelStepA = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const {location} = route.params;
+  console.log(location);
   const [stateModalVisible, setStateModalVisible] = useState(false);
   const [cityModalVisible, setCityModalVisible] = useState(false);
   const [selectedState, setSelectedState] = useState('');
@@ -55,7 +58,7 @@ const DeliverParcelStepA = () => {
           }}
           validationSchema={validationSchema}
           onSubmit={values => {
-            console.log(values)
+            console.log(values);
             navigation.navigate('DeliverParcelStepB', {formData: values});
           }}>
           {({handleSubmit, errors, touched, setFieldValue, values}) => (

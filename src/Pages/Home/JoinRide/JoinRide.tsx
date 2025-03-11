@@ -8,7 +8,7 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import ThreeDropdowns from '../../../Utils/DateDropdown';
@@ -37,6 +37,9 @@ const validationSchema = Yup.object().shape({
 });
 
 const Join = () => {
+  const route = useRoute()
+  const {location} = route.params
+  console.log(location)
   const [currentCity, setCurrentCity] = useState<string>('');
   const [isCurrentCityModalVisible, setCurrentCityModalVisible] = useState(false);
   const navigation = useNavigation();

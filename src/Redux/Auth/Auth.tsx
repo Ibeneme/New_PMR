@@ -1,5 +1,6 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import apiService from '../apiService'; // Import the Axios instance
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Initial state
 interface AuthState {
@@ -53,7 +54,23 @@ export const registerUser = createAsyncThunk(
     }
   },
 );
+export const getUser = createAsyncThunk('auth/getUser', async (_, thunkAPI) => {
+  try {
+    const accessToken = await AsyncStorage.getItem('temp_id'); // Retrieve the token from AsyncStorage
 
+    if (!accessToken) {
+      return thunkAPI.rejectWithValue('No access token found');
+    }
+
+    const response = await apiService.get(`/api/auth/user/${accessToken}`, {});
+
+    return response.data; // Assuming the response contains user data
+  } catch (error) {
+    return thunkAPI.rejectWithValue(
+      error.response?.data?.message || 'Error fetching user',
+    );
+  }
+});
 // Login User
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -135,7 +152,33 @@ export const resendOTP = createAsyncThunk(
     }
   },
 );
-
+// Route to update user details by ID
+export const updateUser = createAsyncThunk(
+  'auth/updateUser',
+  async (
+    userData: {
+      first_name?: string;
+      last_name?: string;
+      phone_number?: string;
+      email?: string;
+      _id?: string
+    },
+    thunkAPI,
+  ) => {
+    try {
+      
+      const response = await apiService.put(
+        `/api/auth/user/${userData._id}`,
+        userData,
+      ); // Use the centralized apiService
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        (error.response.data as ErrorResponse).message,
+      );
+    }
+  },
+);
 // Auth slice
 const authSlice = createSlice({
   name: 'auth',
@@ -231,6 +274,36 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(resendOTP.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Fetch user details (getUser)
+      .addCase(getUser.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(getUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+        state.error = null;
+      })
+      .addCase(getUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Update user details (updateUser)
+      .addCase(updateUser.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload; // Assuming the updated user is returned
+        state.error = null;
+      })
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

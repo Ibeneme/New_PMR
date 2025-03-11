@@ -47,13 +47,15 @@ const Home = () => {
   const handlePress = (title: string) => {
     // Check if the user pressed the "Send a Parcel" option and navigate to StepA
     if (title === 'Send a Parcel') {
-      navigation.navigate('StepA' as never); //DeliverParcelStepA  Navigate to StepA screen
+      navigation.navigate('StepA', {passed: 'StepA'}); //DeliverParcelStepA  Navigate to StepA screen
     } else if (title === 'Deliver a Parcel') {
-      navigation.navigate('DeliverParcelStepA' as never);
+      navigation.navigate('DeliverParcelStepA', {
+        passed: 'DeliverParcelStepA',
+      });
     } else if (title === 'Offer a Ride') {
-      navigation.navigate('OrderRide' as never);
+      navigation.navigate('OrderRide', {passed: 'OrderRide'});
     } else {
-      navigation.navigate('Join' as never);
+      navigation.navigate('Join', {passed: 'Join'});
     }
   };
 
