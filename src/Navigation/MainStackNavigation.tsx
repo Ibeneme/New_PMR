@@ -17,6 +17,7 @@ import DetailsScreen from '../Pages/History/Details';
 import AutoCompletePlaces from '../Pages/Home/AutoCompletePlaces';
 import ChatPage from '../Pages/Messages/ChatPage';
 import ReceiptScreen from '../Pages/History/ReceiptScreen';
+import ChooseBankScreen from '../Pages/Profile/ChooseBankScreen';
 
 export type MainStackParamList = {
   Home: undefined;
@@ -36,6 +37,7 @@ export type MainStackParamList = {
   AutoCompletePlaces: undefined;
   ChatPage: undefined;
   ReceiptScreen: undefined;
+  ChooseBankScreen: undefined;
 };
 
 const MainStack = createStackNavigator<MainStackParamList>();
@@ -124,6 +126,11 @@ const MainStackNavigator: React.FC = () => {
         <MainStack.Screen
           name="ReceiptScreen"
           component={ReceiptScreen}
+          options={{headerShown: false}}
+        />
+        <MainStack.Screen
+          name="ChooseBankScreen"
+          component={ChooseBankScreen}
           options={{headerShown: false}}
         />
       </MainStack.Navigator>

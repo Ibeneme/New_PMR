@@ -7,6 +7,7 @@ import offerRideSlice from './OfferRide/OfferRideSlice';
 import sendParcelSlice from './SendParcel/SendParcelSlice';
 import userSlice from './UserSlice/UserSlice';
 import pairedDriverSlice from './PairedDrivers/pairedDriverSlice';
+import WithdrawalSlice from './WithdrawalSlice.tsx/WithdrawalSlice';
 // import postReducer from './Post/PostSlice'; // Assuming your postSlice is located here
 
 export const store = configureStore({
@@ -19,6 +20,7 @@ export const store = configureStore({
     sendParcel: sendParcelSlice,
     user: userSlice,
     pairedDriverSlice: pairedDriverSlice,
+    WithdrawalSlice: WithdrawalSlice,
     // posts: postReducer, // Add the posts reducer
   },
 });

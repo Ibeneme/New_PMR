@@ -29,12 +29,12 @@ export const formatDate = (dateString: any) => {
 
 const EarningsPage = () => {
   const route = useRoute();
-  const { earnings } = route.params; // Access earnings from route.params
+  const { earnings , totalEarnings} = route.params; // Access earnings from route.params
 
-  const totalEarnings = earnings?.reduce(
-    (acc, item) => acc + (item.amount || 0),
-    0,
-  ); // Sum of all earnings
+  // const totalEarnings = earnings?.reduce(
+  //   (acc, item) => acc + (item.amount || 0),
+  //   0,
+  // ); // Sum of all earnings
 
   // Function to format the date with suffix (st, nd, rd, th)
   const renderItem = ({ item }) => (

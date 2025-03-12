@@ -39,22 +39,16 @@ const Profile = () => {
   const {clearTokens, tokens} = useTokens(); // Destructure tokens for logging
 
   const confirmLogout = () => {
-    AsyncStorage.removeItem('accessToken') // Remove accessToken from AsyncStorage
+    AsyncStorage.clear()  // Clears all items from AsyncStorage
       .then(() => {
-        return AsyncStorage.removeItem('refreshToken'); // Chain to remove refreshToken
-      })
-      .then(() => {
-        return AsyncStorage.removeItem('userData'); // Remove user data from AsyncStorage
-      })
-      .then(() => {
-        clearTokens();
-        console.log('Tokens cleared from storage and context.');
+        clearTokens();  // Clear any related tokens or context data
+        console.log('All data cleared from storage and context.');
       })
       .catch(error => {
         console.error('Error during logout:', error);
       })
       .finally(() => {
-        setIsLogoutModalVisible(false);
+        setIsLogoutModalVisible(false);  // Close the logout modal
       });
   };
 
@@ -187,6 +181,18 @@ const Profile = () => {
             }>
             <RegularText fontSize={16}>Withdrawals</RegularText>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.button]}
+            onPress={() =>
+              navigation.navigate('ChooseBankScreen', {
+                totalBalance: user?.totalBalance,
+                userID: user?._id
+              })
+            }>
+            <RegularText fontSize={16}>Request Withdrawal</RegularText>
+          </TouchableOpacity>
+
           <TouchableOpacity
             style={[styles.button]}
             onPress={() => setIsLogoutModalVisible(true)}>
